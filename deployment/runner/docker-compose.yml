@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+    wedding-api:
+        image: docker.pkg.github.com/orn-id/wedding-api/wedding-api:latest
+        restart: always
+        expose:
+            - "8081"
+        volumes:
+            - type: bind
+              source: ./environment/wedding-api/.env
+              target: /opt/wedding-api/.env
+              read_only: true

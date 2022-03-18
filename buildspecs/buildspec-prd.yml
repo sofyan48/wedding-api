@@ -1,0 +1,31 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo install steps...
+  pre_build:
+    commands:
+      - sh deployment/deployment-prd.sh
+      - echo Logging into AWS ECR...
+      - $(aws ecr get-login --no-include-email --region ap-southeast-1)
+      # change OTORAJA_AWS_ID
+      - REPOSITORY_URI=OTORAJA_AWS_ID.dkr.ecr.ap-southeast-1.amazonaws.com/wedding-api-prd
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - echo build Docker image on `date`
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest  -f deployment/dockerfiles/dockerfile-prd .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo build Docker image complete `date`
+      - echo push latest Docker images to ECR...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing Image Definitions File...
+      - printf '[{"name":"wedding-api-task-prd","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > wedding-api-prd.json
+artifacts:
+  type: zip
+  files:
+    - "**/*"

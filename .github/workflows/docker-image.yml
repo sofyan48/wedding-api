@@ -1,0 +1,29 @@
+name: wedding-api Service Local Development
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Creating fake environment
+      run: touch .env
+
+    - name: Build and tag image
+      run: docker build -t "docker.pkg.github.com/orn-id/wedding-api/wedding-api:latest" -f deployment/dockerfiles/dockerfile-dev .
+    
+    - name: Docker login
+      run: docker login docker.pkg.github.com -u $ACTOR -p $GITHUB_TOKEN
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKENS }}
+        ACTOR: ${{ github.actor }}
+        
+    - name: Publish to GPR
+      run: docker push "docker.pkg.github.com/orn-id/wedding-api/wedding-api:latest"
+
