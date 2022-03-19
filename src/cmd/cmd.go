@@ -36,7 +36,7 @@ func Start() {
 			},
 		},
 		{
-			Use:   "wa",
+			Use:   "scan",
 			Short: "Login whatsapp web client",
 			Run: func(cmd *cobra.Command, args []string) {
 				app.LoginClient()

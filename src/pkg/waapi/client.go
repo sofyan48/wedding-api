@@ -11,15 +11,18 @@ import (
 )
 
 type waClient struct {
+	clientQrKey string
 }
 
 func NewWhatsappWebClient() WhatsappWebClient {
-	return &waClient{}
+	return &waClient{
+		clientQrKey: "./tmp/whatsappSession.gob",
+	}
 }
 
 func (w *waClient) readSession() (whatsapp.Session, error) {
 	session := whatsapp.Session{}
-	file, err := os.Open((os.TempDir() + "/whatsappSession.gob"))
+	file, err := os.Open(w.clientQrKey)
 	if err != nil {
 		return session, err
 	}
@@ -39,7 +42,7 @@ func (w *waClient) Conn() (*whatsapp.Conn, error) {
 }
 
 func (w *waClient) writeSession(session whatsapp.Session) error {
-	file, err := os.Create(os.TempDir() + "/whatsappSession.gob")
+	file, err := os.Create(w.clientQrKey)
 	if err != nil {
 		return err
 	}
