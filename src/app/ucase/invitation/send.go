@@ -1,4 +1,4 @@
-package guest
+package invitation
 
 import (
 	"fmt"
@@ -56,7 +56,7 @@ func (v *sendInvitation) Serve(data *appctx.Data) appctx.Response {
 
 	u.RawQuery = q.Encode()
 
-	message := "*Assalamualaikum wr.wb*\n\nHalo kak *" + req.Name + "*\n\nTanpa mengurangi rasa hormat kami, kami mengundang anda di acara pernikahan kami.\nsilahkan buka link: " + u.String() + "\n\nTerima Kasih\n\nHormat Kami:\n*Sofyan Saputra & Besse Sindi Arini*."
+	message := "*Assalamualaikum wr.wb*\n\nKepada Saudara(i):\n*" + req.Name + "*\n\nTanpa mengurangi rasa hormat kami, kami mengundang anda di acara pernikahan kami.\nsilahkan buka link:\n" + u.String() + "\n\nTerima Kasih\n\nHormat Kami:\n*Sofyan Saputra & Besse Sindi Arini*."
 
 	wac, err := v.chat.Conn()
 	if err != nil {

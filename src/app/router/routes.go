@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/orn-id/wedding-api/src/app/ucase"
-	"github.com/orn-id/wedding-api/src/app/ucase/guest"
+	"github.com/orn-id/wedding-api/src/app/ucase/invitation"
 	"github.com/orn-id/wedding-api/src/handler"
 	_ "github.com/orn-id/wedding-api/src/swagger"
 	"github.com/orn-id/wedding-api/src/validator"
@@ -34,13 +34,13 @@ func (rtr *router) Route() *mux.Router {
 	ex := root.PathPrefix("/ex/").Subrouter()
 	exV1 := ex.PathPrefix("/v1/").Subrouter()
 
-	importsInvitation := guest.NewImports()
+	importsInvitation := invitation.NewImports()
 	exV1.HandleFunc("/invitation/import", rtr.handle(
 		handler.HttpRequest,
 		importsInvitation,
 	)).Methods(http.MethodPost)
 
-	sendInvitation := guest.NewSendInvitation(validator.New())
+	sendInvitation := invitation.NewSendInvitation(validator.New())
 	exV1.HandleFunc("/invitation", rtr.handle(
 		handler.HttpRequest,
 		sendInvitation,

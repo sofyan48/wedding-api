@@ -1,4 +1,4 @@
-package guest
+package invitation
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/orn-id/wedding-api/src/app/appctx"
-	"github.com/orn-id/wedding-api/src/app/presentations"
 	"github.com/orn-id/wedding-api/src/app/ucase/contract"
 	"github.com/orn-id/wedding-api/src/consts"
 	"github.com/orn-id/wedding-api/src/pkg/excel"
@@ -64,7 +63,6 @@ func (v *imports) Serve(data *appctx.Data) appctx.Response {
 		}
 	}
 	rows := xlsx.GetRows(sheet)
-	reports := []presentations.ImportsReport{}
 	listSave := []map[string]string{}
 
 	wac, err := v.chat.Conn()
@@ -84,7 +82,6 @@ func (v *imports) Serve(data *appctx.Data) appctx.Response {
 			Message: err.Error(),
 		}
 	}
-
 	for i := 2; i <= len(rows); i++ {
 		name := xlsx.GetCellValue(sheet, fmt.Sprintf("A%d", i))
 		waNumber := xlsx.GetCellValue(sheet, fmt.Sprintf("B%d", i))
@@ -99,7 +96,7 @@ func (v *imports) Serve(data *appctx.Data) appctx.Response {
 
 		u.RawQuery = q.Encode()
 
-		message := "*Assalamualaikum wr.wb*\n\nHalo kak *" + name + "*\n\nTanpa mengurangi rasa hormat kami, kami mengundang anda di acara pernikahan kami.\nsilahkan buka link: " + u.String() + "\n\nTerima Kasih\n\nHormat Kami:\n*Sofyan Saputra & Besse Sindi Arini*."
+		message := "*Assalamualaikum wr.wb*\n\nKepada Saudara(i):\n*" + name + "*\n\nTanpa mengurangi rasa hormat kami, kami mengundang anda di acara pernikahan kami.\nsilahkan buka link:\n" + u.String() + "\n\nTerima Kasih\n\nHormat Kami:\n*Sofyan Saputra & Besse Sindi Arini*."
 
 		chatID, err := v.chat.Send(wac, waNumber, message)
 		status := "send"
@@ -117,7 +114,7 @@ func (v *imports) Serve(data *appctx.Data) appctx.Response {
 
 	}
 
-	totalRows := len(reports)
+	totalRows := len(listSave)
 	err = os.Remove(tempFile.Name())
 	if err != nil {
 		fmt.Println("Error: ", err.Error())
