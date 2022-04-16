@@ -15,7 +15,6 @@ import (
 
 // Start handler registering service command
 func Start() {
-
 	rootCmd := &cobra.Command{}
 	logger.SetJSONFormatter()
 	ctx, cancel := context.WithCancel(context.Background())
@@ -27,21 +26,22 @@ func Start() {
 		cancel()
 	}()
 
+	http := &cobra.Command{
+		Use:   "http",
+		Short: "Run http server",
+	}
+	http.AddCommand(app.Serve(ctx))
+
+	wa := &cobra.Command{
+		Use:   "wa",
+		Short: "WA Client",
+	}
+
+	wa.AddCommand(app.Scan())
+
 	cmd := []*cobra.Command{
-		{
-			Use:   "serve",
-			Short: "Run HTTP Server",
-			Run: func(cmd *cobra.Command, args []string) {
-				app.Start(ctx)
-			},
-		},
-		{
-			Use:   "scan",
-			Short: "Login whatsapp web client",
-			Run: func(cmd *cobra.Command, args []string) {
-				app.LoginClient()
-			},
-		},
+		http,
+		wa,
 	}
 
 	rootCmd.AddCommand(cmd...)

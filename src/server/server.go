@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/orn-id/wedding-api/src/app/router"
@@ -27,11 +26,11 @@ type httpServer struct {
 // Run runs the http server gracefully
 // returns:
 //	err: error operation
-func (h *httpServer) Run(ctx context.Context) error {
+func (h *httpServer) Run(ctx context.Context, port string) error {
 	var err error
 
 	server := http.Server{
-		Addr:         fmt.Sprintf("0.0.0.0:%s", os.Getenv("SERVER_PORT")),
+		Addr:         fmt.Sprintf("0.0.0.0:%s", port),
 		Handler:      h.router.Route(),
 		ReadTimeout:  time.Duration(5) * time.Second,
 		WriteTimeout: time.Duration(15) * time.Second,

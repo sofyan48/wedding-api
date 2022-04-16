@@ -14,6 +14,6 @@ type httpHandlerFunc func(request *http.Request, svc ucase.UseCase) appctx.Respo
 
 // Server contract
 type Server interface {
-	Run(context.Context) error
+	Run(ctx context.Context, port string) error
 	Done()
 }

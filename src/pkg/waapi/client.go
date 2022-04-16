@@ -71,13 +71,13 @@ func (w *waClient) Login(wac *whatsapp.Conn) error {
 			terminal := qrcodeTerminal.New()
 			terminal.Get(<-qr).Print()
 		}()
+
 		session, err = wac.Login(qr)
 		if err != nil {
 			fmt.Println("error during login: ", err)
 			return err
 		}
 	}
-
 	err = w.writeSession(session)
 	if err != nil {
 		fmt.Println("error saving session: ", err.Error())

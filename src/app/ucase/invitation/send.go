@@ -52,7 +52,6 @@ func (v *sendInvitation) Serve(data *appctx.Data) appctx.Response {
 	}
 	q := u.Query()
 	q.Set("name", req.Name)
-	q.Set("addres", req.Address)
 
 	u.RawQuery = q.Encode()
 

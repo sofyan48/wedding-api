@@ -49,4 +49,4 @@ COPY --from=builder $BUILDDIR/config/msg.yaml $PROJECT_DIR/config/msg.yaml
 COPY --from=builder $BUILDDIR/.env $PROJECT_DIR/.env
 
 
-CMD ["sh","-c", "/opt/wedding-api/wedding-api serve"]
+CMD ["sh","-c", "/opt/wedding-api/wedding-api http serve"]
